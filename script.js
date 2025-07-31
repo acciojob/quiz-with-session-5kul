@@ -1,5 +1,4 @@
-// JS Code: Quiz with Session Storage and Score Tracking
-
+// Questions array
 const questions = [
   {
     question: "What is the capital of France?",
@@ -18,7 +17,7 @@ const questions = [
   },
   {
     question: "Which is the largest planet in our solar system?",
-    choices: ["Earth", "Jupiter", "Mars"],
+    choices: ["Earth", "Jupiter", "Mars", "Saturn"],
     answer: "Jupiter",
   },
   {
@@ -28,84 +27,76 @@ const questions = [
   },
 ];
 
-// Get references
+// DOM references
 const questionsElement = document.getElementById("questions");
 const scoreElement = document.getElementById("score");
 const submitBtn = document.getElementById("submit");
 
-// Load session progress or initialize
+// Load saved progress or initialize
 let userAnswers = JSON.parse(sessionStorage.getItem("progress")) || {};
 
-// Render all quiz questions
+// Render quiz questions
 function renderQuestions() {
-  questionsElement.innerHTML = ""; // clear if re-rendering
+  questionsElement.innerHTML = "";
 
-  for (let i = 0; i < questions.length; i++) {
-    const question = questions[i];
-
-    const questionElement = document.createElement("div");
+  questions.forEach((question, index) => {
+    const questionDiv = document.createElement("div");
 
     const questionText = document.createElement("p");
-    questionText.textContent = `${i + 1}. ${question.question}`;
-    questionElement.appendChild(questionText);
+    questionText.textContent = `${index + 1}. ${question.question}`;
+    questionDiv.appendChild(questionText);
 
-    for (let j = 0; j < question.choices.length; j++) {
-      const choice = question.choices[j];
-
+    question.choices.forEach(choice => {
       const label = document.createElement("label");
-      const choiceInput = document.createElement("input");
+      const input = document.createElement("input");
 
-      choiceInput.type = "radio";
-      choiceInput.name = `question-${i}`;
-      choiceInput.value = choice;
+      input.type = "radio";
+      input.name = `question-${index}`;
+      input.value = choice;
 
-      // Restore selection
-      if (userAnswers[`q${i}`] === choice) {
-        choiceInput.checked = true;
+      // Restore previously selected answer
+      if (userAnswers[`q${index}`] === choice) {
+        input.checked = true;
       }
 
-      // Listen for change and store in sessionStorage
-      choiceInput.addEventListener("change", () => {
-        userAnswers[`q${i}`] = choice;
+      // Store selection in sessionStorage
+      input.addEventListener("change", () => {
+        userAnswers[`q${index}`] = choice;
         sessionStorage.setItem("progress", JSON.stringify(userAnswers));
       });
 
-      label.appendChild(choiceInput);
+      label.appendChild(input);
       label.appendChild(document.createTextNode(choice));
-      questionElement.appendChild(label);
-      questionElement.appendChild(document.createElement("br"));
-    }
+      questionDiv.appendChild(label);
+    });
 
-    questionsElement.appendChild(questionElement);
-  }
+    questionsElement.appendChild(questionDiv);
+  });
 }
 
-// Calculate score and store in localStorage
+// Calculate and display score
 function calculateScore() {
   let score = 0;
 
-  for (let i = 0; i < questions.length; i++) {
-    const correct = questions[i].answer;
-    const userAnswer = userAnswers[`q${i}`];
-    if (userAnswer === correct) {
+  questions.forEach((question, index) => {
+    const selected = userAnswers[`q${index}`];
+    if (selected === question.answer) {
       score++;
     }
-  }
+  });
 
   scoreElement.textContent = `Your score is ${score} out of ${questions.length}.`;
   localStorage.setItem("score", score);
 }
 
-// Submit button handler
-submitBtn.addEventListener("click", () => {
-  calculateScore();
-});
+// Event listener for submit
+submitBtn.addEventListener("click", calculateScore);
 
-// Initial render
+// Render the questions on page load
 renderQuestions();
 
-// Display stored score on reload (optional)
-const storedScore = localStorage.getItem("score");
-if (storedScore !== null) {
-  scoreElement.textContent = `Your score is ${storedScore} out of ${questions.length}.`;
+// Show score from localStorage (if exists)
+const savedScore = localStorage.getItem("score");
+if (savedScore !== null) {
+  scoreElement.textContent = `Your score is ${savedScore} out of ${questions.length}.`;
 }
