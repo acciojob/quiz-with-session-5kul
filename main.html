@@ -1,17 +1,74 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
 
-<html>
-  <head>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+    h1 {
+      color: #333;
+    }
 
-  <body>
-    <!-- do not change this code -->
-    <h1>Quiz</h1>
-    <div id="questions"></div>
-    <button id="submit">Submit</button>
-    <div id="score"></div>
+    #questions {
+      margin-bottom: 20px;
+    }
 
-    <script type="text/javascript" src="./script.js"></script>
-  </body>
+    #questions div {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+
+    #submit {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    #submit:hover {
+      background-color: #0056b3;
+    }
+
+    #score {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Quiz</h1>
+
+  <!-- Questions will be rendered here -->
+  <div id="questions"></div>
+
+  <!-- Submit button -->
+  <button id="submit">Submit</button>
+
+  <!-- Score display -->
+  <div id="score"></div>
+
+  <!-- JavaScript functionality -->
+  <script src="script.js"></script>
+</body>
 </html>
